@@ -1,20 +1,21 @@
 package com.example.demo;
 
+import java.util.Objects;
+
 public class Room {
-    private String name;
-    private Status status;
+    private String id;
+    private Status status = Status.AVAILABLE;
 
-    public Room(String name, Status status) {
-        this.name = name;
-        this.status = status;
+    public Room(String id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Status getStatus() {
@@ -23,5 +24,18 @@ public class Room {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        return Objects.equals(id, room.id) && status == room.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, status);
     }
 }
