@@ -4,19 +4,21 @@ import java.util.List;
 import java.util.Optional;
 
 public class SimpleBookingSystem implements BookingSystem{
-    private int floor;
-    private int roomsPerFloor;
-    private Room[] rooms;
+    private final Room[] rooms;
+    private int closestRoom;
 
     public SimpleBookingSystem (int floor, int roomsPerFloor) {
-        this.floor = floor;
-        this.roomsPerFloor = roomsPerFloor;
-
+        this.rooms = SimpleBookingSystemUtilities.populateRooms(floor, roomsPerFloor);
+        closestRoom = 0;
     }
 
     @Override
     public Optional<String> assignRoom() {
-        return Optional.empty();
+        if (closestRoom >= rooms.length) {
+            return Optional.empty();
+        }
+        Room selectedRoom = rooms[closestRoom++];
+        return Optional.of(selectedRoom.getId());
     }
 
     @Override
