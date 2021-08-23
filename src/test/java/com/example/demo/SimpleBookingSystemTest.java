@@ -5,8 +5,7 @@ import org.testng.annotations.Test;
 
 import java.util.Optional;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class SimpleBookingSystemTest {
     private BookingSystem bookingSystem;
@@ -19,12 +18,14 @@ public class SimpleBookingSystemTest {
     @Test
     public void shouldAssignFirstRoom() {
         assertEquals(bookingSystem.assignRoom(), Optional.of("1A"));
+        assertFalse(bookingSystem.getAllAvailableRooms().contains("1A"));
     }
 
     @Test
     public void shouldAssignSecondRoom() {
         bookingSystem.assignRoom();
         assertEquals(bookingSystem.assignRoom(),Optional.of("1B"));
+        assertFalse(bookingSystem.getAllAvailableRooms().contains("1B"));
     }
 
     @Test
@@ -33,6 +34,7 @@ public class SimpleBookingSystemTest {
             bookingSystem.assignRoom();
         }
         assertEquals(bookingSystem.assignRoom(), Optional.of("4A"));
+        assertFalse(bookingSystem.getAllAvailableRooms().contains("4A"));
     }
 
     @Test

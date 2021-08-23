@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ public class SimpleBookingSystem implements BookingSystem{
             return Optional.empty();
         }
         Room selectedRoom = rooms[closestRoom++];
+        selectedRoom.setStatus(Status.OCCUPIED);
         return Optional.of(selectedRoom.getId());
     }
 
@@ -38,7 +40,7 @@ public class SimpleBookingSystem implements BookingSystem{
 
     @Override
     public List<String> getAllAvailableRooms() {
-        return null;
+        return new ArrayList<>();
     }
 
 
