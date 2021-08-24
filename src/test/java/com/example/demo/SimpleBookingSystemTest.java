@@ -3,6 +3,7 @@ package com.example.demo;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -17,40 +18,42 @@ public class SimpleBookingSystemTest {
     }
 
     @Test
-    public void shouldAssignFirstRoom() {
-        assertEquals(bookingSystem.assignRoom(), Optional.of("1A"));
+    public void shouldCheckInFirstRoom() {
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
         assertFalse(bookingSystem.getAllAvailableRooms().contains("1A"));
     }
 
     @Test
-    public void shouldAssignSecondRoom() {
-        bookingSystem.assignRoom();
-        assertEquals(bookingSystem.assignRoom(),Optional.of("1B"));
+    public void shouldCheckInSecondRoom() {
+        bookingSystem.checkInRoom();
+        assertEquals(bookingSystem.checkInRoom(),Optional.of("1B"));
         assertFalse(bookingSystem.getAllAvailableRooms().contains("1B"));
     }
 
     @Test
-    public void shouldAssignLastRoom() {
+    public void shouldCheckInLastRoom() {
         for (int i=0; i < 19; i++) {
-            bookingSystem.assignRoom();
+            bookingSystem.checkInRoom();
         }
-        assertEquals(bookingSystem.assignRoom(), Optional.of("4A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("4A"));
         assertFalse(bookingSystem.getAllAvailableRooms().contains("4A"));
     }
 
     @Test
-    public void shouldNotAssignRoomWhenAllRoomsAreAssigned() {
+    public void shouldNotCheckInRoomWhenAllRoomsAreOccupied() {
         for (int i=0; i < 20; i++) {
-            bookingSystem.assignRoom();
+            bookingSystem.checkInRoom();
         }
-        assertTrue(bookingSystem.assignRoom().isEmpty());
+        assertTrue(bookingSystem.checkInRoom().isEmpty());
     }
 
     @Test
     public void shouldCheckOutOccupiedRoom() {
-        bookingSystem.assignRoom();
+        bookingSystem.checkInRoom();
         assertFalse(bookingSystem.getAllAvailableRooms().contains("1A"));
         bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomRepair("1A");
+        bookingSystem.markRoomAvailable("1A");
         assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
     }
 
@@ -61,21 +64,69 @@ public class SimpleBookingSystemTest {
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void shouldNotCheckOutVacantRoom() {
-        bookingSystem.assignRoom();
+        bookingSystem.checkInRoom();
         bookingSystem.checkOutRoom("1A");
         bookingSystem.checkOutRoom("1A");
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void shouldNotCheckOutRepairRoom() {
-        bookingSystem.assignRoom();
+        bookingSystem.checkInRoom();
         bookingSystem.checkOutRoom("1A");
         bookingSystem.markRoomRepair("1A");
         bookingSystem.checkOutRoom("1A");
     }
 
     @Test
-    public void testMarkRoomAvailable() {
+    public void shouldMarkVacantRoomAsAvailable() {
+        assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomAvailable("1A");
+        assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotMarkOccupiedRoomAsAvailable() {
+        assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
+        bookingSystem.markRoomAvailable("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotMarkAvailableRoomAsAvailable() {
+        assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
+        bookingSystem.markRoomAvailable("1A");
+    }
+
+    @Test
+    public void shouldRefreshClosestRoom () {
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1B"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1C"));
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomAvailable("1A");
+        bookingSystem.checkOutRoom("1C");
+        bookingSystem.markRoomAvailable("1C");
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1C"));
+    }
+
+    @Test
+    public void shouldRefreshClosestRoomOnNextFloor () {
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1B"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1C"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1D"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1E"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("2E"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("2D"));
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomAvailable("1A");
+        bookingSystem.checkOutRoom("2D");
+        bookingSystem.markRoomAvailable("2D");
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("2D"));
     }
 
     @Test
