@@ -138,7 +138,6 @@ public class SimpleBookingSystemTest {
     @Test (expectedExceptions = UnsupportedOperationException.class)
     public void shouldNotMarkOccupiedRoomAsRepair() {
         bookingSystem.checkInRoom();
-        bookingSystem.checkOutRoom("1A");
         bookingSystem.markRoomRepair("1A");
     }
 
@@ -161,6 +160,8 @@ public class SimpleBookingSystemTest {
         bookingSystem.checkOutRoom("1A");
         bookingSystem.markRoomRepair("1A");
         bookingSystem.finishRoomRepair("1A");
+        bookingSystem.markRoomAvailable("1A");
+        assertEquals(bookingSystem.checkInRoom(), Optional.of("1A"));
     }
 
     @Test (expectedExceptions = UnsupportedOperationException.class)

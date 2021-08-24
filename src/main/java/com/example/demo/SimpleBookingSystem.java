@@ -49,11 +49,12 @@ public class SimpleBookingSystem implements BookingSystem{
 
     @Override
     public void markRoomRepair(String roomId) {
-        changeRoomStatus(roomId, Status.VACANT, Status.REPAIR, "Can only repair vacant rooms.");
+        changeRoomStatus(roomId, Status.VACANT, Status.REPAIR, "Can only mark vacant rooms as repair.");
     }
 
     @Override
     public void finishRoomRepair (String roomId) {
+        changeRoomStatus(roomId, Status.REPAIR, Status.VACANT, "Can only repair the room marked as repair.");
     }
 
     @Override
