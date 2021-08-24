@@ -52,7 +52,6 @@ public class SimpleBookingSystemTest {
         bookingSystem.checkInRoom();
         assertFalse(bookingSystem.getAllAvailableRooms().contains("1A"));
         bookingSystem.checkOutRoom("1A");
-        bookingSystem.markRoomRepair("1A");
         bookingSystem.markRoomAvailable("1A");
         assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
     }
@@ -130,7 +129,56 @@ public class SimpleBookingSystemTest {
     }
 
     @Test
-    public void testMarkRoomRepair() {
+    public void shouldMarkVacantRoomAsRepair() {
+        bookingSystem.checkInRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomRepair("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotMarkOccupiedRoomAsRepair() {
+        bookingSystem.checkInRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomRepair("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotMarkAvailableRoomAsRepair() {
+        bookingSystem.markRoomRepair("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotMarkRepairRoomAsRepair() {
+        bookingSystem.checkInRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomRepair("1A");
+        bookingSystem.markRoomRepair("1A");
+    }
+
+    @Test
+    public void shouldRepairRoom() {
+        bookingSystem.checkInRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomRepair("1A");
+        bookingSystem.finishRoomRepair("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotRepairAvailableRoom() {
+        bookingSystem.finishRoomRepair("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotRepairOccupiedRoom() {
+        bookingSystem.checkInRoom();
+        bookingSystem.finishRoomRepair("1A");
+    }
+
+    @Test (expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotRepairVacantRoom() {
+        bookingSystem.checkInRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.finishRoomRepair("1A");
     }
 
     @Test

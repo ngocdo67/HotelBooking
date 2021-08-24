@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class SimpleBookingSystem implements BookingSystem{
+    private final int roomsPerFloor;
+    private final int floor;
     private final Room[] rooms;
     private int closestRoom;
-    private int roomsPerFloor;
-    private int floor;
 
     public SimpleBookingSystem (int floor, int roomsPerFloor) {
         this.floor = floor;
@@ -49,6 +49,11 @@ public class SimpleBookingSystem implements BookingSystem{
 
     @Override
     public void markRoomRepair(String roomId) {
+        changeRoomStatus(roomId, Status.VACANT, Status.REPAIR, "Can only repair vacant rooms.");
+    }
+
+    @Override
+    public void finishRoomRepair (String roomId) {
     }
 
     @Override

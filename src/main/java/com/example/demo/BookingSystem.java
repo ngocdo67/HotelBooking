@@ -8,5 +8,6 @@ public interface BookingSystem {
     void checkOutRoom (String roomId);
     void markRoomAvailable (String roomId);
     void markRoomRepair (String roomId);
+    void finishRoomRepair (String roomId);
     List<String> getAllAvailableRooms ();
 }
