@@ -26,4 +26,14 @@ public final class SimpleBookingSystemUtilities {
         }
         return rooms;
     }
+
+    public static int getDistance (String roomId, int roomsPerFloor) {
+        int curFloor = Integer.parseInt(roomId.substring(0, 1));
+        char curRoom = roomId.substring(1, 2).toCharArray()[0];
+        if (curFloor % 2 == 0) {
+            return (curFloor-1) * roomsPerFloor + ('E' - curRoom);
+        } else {
+            return (curFloor-1) * roomsPerFloor + (curRoom - 'A');
+        }
+    }
 }

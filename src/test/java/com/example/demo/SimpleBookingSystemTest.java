@@ -3,6 +3,7 @@ package com.example.demo;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.testng.Assert.*;
@@ -46,7 +47,31 @@ public class SimpleBookingSystemTest {
     }
 
     @Test
-    public void testCheckOutRoom() {
+    public void shouldCheckOutOccupiedRoom() {
+        bookingSystem.assignRoom();
+        assertFalse(bookingSystem.getAllAvailableRooms().contains("1A"));
+        bookingSystem.checkOutRoom("1A");
+        assertTrue(bookingSystem.getAllAvailableRooms().contains("1A"));
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotCheckOutAvailableRoom() {
+        bookingSystem.checkOutRoom("4A");
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotCheckOutVacantRoom() {
+        bookingSystem.assignRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.checkOutRoom("1A");
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void shouldNotCheckOutRepairRoom() {
+        bookingSystem.assignRoom();
+        bookingSystem.checkOutRoom("1A");
+        bookingSystem.markRoomRepair("1A");
+        bookingSystem.checkOutRoom("1A");
     }
 
     @Test
@@ -58,6 +83,12 @@ public class SimpleBookingSystemTest {
     }
 
     @Test
-    public void testGetAllAvailableRooms() {
+    public void shouldGetAllAvailableRooms() {
+        assertEquals(bookingSystem.getAllAvailableRooms(), Arrays.asList(
+                "1A", "1B", "1C", "1D", "1E",
+                "2E", "2D", "2C", "2B", "2A",
+                "3A", "3B", "3C", "3D", "3E",
+                "4E", "4D", "4C", "4B", "4A"
+        ));
     }
 }

@@ -16,4 +16,14 @@ public class SimpleBookingSystemUtilitiesTest {
         };
         assertEquals(SimpleBookingSystemUtilities.populateRooms(4, 5), expected);
     }
+
+    @Test
+    public void testGetDistanceZero() {
+        assertEquals(SimpleBookingSystemUtilities.getDistance("1A", 5), 0);
+    }
+
+    @Test
+    public void testGetDistanceSeven() {
+        assertEquals(SimpleBookingSystemUtilities.getDistance("2C", 5), 7);
+    }
 }

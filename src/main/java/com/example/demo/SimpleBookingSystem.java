@@ -40,7 +40,13 @@ public class SimpleBookingSystem implements BookingSystem{
 
     @Override
     public List<String> getAllAvailableRooms() {
-        return new ArrayList<>();
+        List<String> availableRooms = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.getStatus() == Status.AVAILABLE) {
+                availableRooms.add(room.getId());
+            }
+        }
+        return availableRooms;
     }
 
 
