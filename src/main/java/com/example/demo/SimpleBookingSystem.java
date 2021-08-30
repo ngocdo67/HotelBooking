@@ -1,14 +1,25 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class SimpleBookingSystem implements BookingSystem{
+    private static final int DEFAULT_FLOOR = 4;
+    private static final int DEFAULT_ROOMS_PER_FLOOR = 5;
     private final int roomsPerFloor;
     private final int floor;
     private final Room[] rooms;
     private int closestRoom;
+
+    @Autowired
+    public SimpleBookingSystem () {
+        this(DEFAULT_FLOOR, DEFAULT_ROOMS_PER_FLOOR);
+    }
 
     public SimpleBookingSystem (int floor, int roomsPerFloor) {
         this.floor = floor;
